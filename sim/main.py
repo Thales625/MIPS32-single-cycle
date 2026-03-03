@@ -1,28 +1,52 @@
-import cocotb
-from cocotb.clock import Clock
-from cocotb.triggers import RisingEdge
+import os
+import sys
+from pathlib import Path
+from cocotb_tools.runner import get_runner
 
-@cocotb.test()
-async def test_processor_execution(dut):
-    # set clock
-    cocotb.start_soon(Clock(dut.clock, 10, unit="ns").start())
+# define simulator
+sim = os.getenv("SIM", "questa")
 
-    # apply reset
-    cocotb.log.info("applying Reset...")
-    dut.reset.value = 1
-    await RisingEdge(dut.clock)
-    dut.reset.value = 0
-    
-    # monitor ports
-    cocotb.log.info("initializing CPU...")
-    
-    for cycle in range(10):
-        # wait clock rising edge
-        await RisingEdge(dut.clock)
-        
-        # read ports
-        current_pc = dut.debug_pc.value
-        current_inst = dut.data_out.value
-        
-        # logging
-        cocotb.log.info(f"CYCLE {cycle}: PC = {current_pc.to_unsigned():<4} | INSTRUCTION = {current_inst}")
+# define path
+vhdl_dir = Path(__file__).resolve().parent.parent / "vhdl"
+
+# get cocotb runner
+runner = get_runner(sim)
+
+# define vhdl files
+vhdl_sources = [
+    vhdl_dir / "Adder.vhd",
+    vhdl_dir / "Mux2_1.vhd",
+    vhdl_dir / "Reg.vhd",
+    vhdl_dir / "RegFile.vhd",
+    vhdl_dir / "ULA.vhd",
+    vhdl_dir / "ULA_Operation.vhd",
+    vhdl_dir / "Shifter.vhd",
+    vhdl_dir / "MemInst.vhd",
+    vhdl_dir / "MemData.vhd",
+    vhdl_dir / "ControlUnit.vhd",
+    vhdl_dir / "Processor.vhd"
+]
+
+def build():
+    runner.build(
+        sources=vhdl_sources,
+        hdl_toplevel="processor",
+        always=True,
+        build_dir=".",
+    )
+
+def simulate():
+    runner.test(
+        hdl_toplevel="processor",
+        hdl_toplevel_lang="vhdl",
+        test_module="simulation",
+        build_dir=".",
+    )
+
+if __name__ == "__main__":
+    if not "--skip-build" in sys.argv:
+        print("Building VHDL files...")
+        build()
+
+    print("Running simulation...")
+    simulate()
