@@ -1,28 +1,42 @@
 import cocotb
-from cocotb.clock import Clock
-from cocotb.triggers import RisingEdge
+from cocotb.triggers import Timer
+
+from visualizer import Window
+
+# cpu coroutine
+async def cpu_runner(dut):
+    cycle = 0
+    dut.clock.value = 0
+    
+    while True:
+        if Window.is_running or Window.step_requested:
+            dut.clock.value = 1
+            await Timer(10, unit="ns")
+            dut.clock.value = 0
+            await Timer(10, unit="ns")
+            
+            cycle += 1
+
+            Window.update(cycle)
+            Window.step_requested = False
+        else:
+            await Timer(1, unit="ns")
 
 @cocotb.test()
-async def test_processor_execution(dut):
-    # set clock
-    cocotb.start_soon(Clock(dut.clock, 10, unit="ns").start())
+async def testbench(dut):
+    # init DPG Window
+    Window.init(dut)
+
+    # init cpu coroutine
+    cocotb.start_soon(cpu_runner(dut))
 
     # apply reset
-    cocotb.log.info("applying Reset...")
     dut.reset.value = 1
-    await RisingEdge(dut.clock)
+    await Timer(20, unit="ns")
     dut.reset.value = 0
     
-    # monitor ports
-    cocotb.log.info("initializing CPU...")
-    
-    for cycle in range(10):
-        # wait clock rising edge
-        await RisingEdge(dut.clock)
+    while Window.running():
+        Window.render()
+        await Timer(10, unit="ns") 
         
-        # read ports
-        current_pc = dut.debug_pc.value
-        current_inst = dut.data_out.value
-        
-        # logging
-        cocotb.log.info(f"CYCLE {cycle}: PC = {current_pc.to_unsigned():<4} | INSTRUCTION = {current_inst}")
+    Window.destroy()

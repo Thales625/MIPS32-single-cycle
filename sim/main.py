@@ -1,7 +1,23 @@
 import os
 import sys
+import platform
+import subprocess
 from pathlib import Path
 from cocotb_tools.runner import get_runner
+
+if platform.system() == "Linux":
+    try:
+        lib_path = subprocess.check_output(
+            ["gcc", "--print-file-name=libstdc++.so.6"], 
+            text=True
+        ).strip()
+        
+        if os.path.isabs(lib_path) and os.path.exists(lib_path):
+            os.environ["LD_PRELOAD"] = lib_path
+    except FileNotFoundError:
+        print("WARNING: GCC not found. Questa might fail when loading the GUI.")
+
+os.environ["PYTHONUNBUFFERED"] = "1"
 
 # define simulator
 sim = os.getenv("SIM", "questa")
