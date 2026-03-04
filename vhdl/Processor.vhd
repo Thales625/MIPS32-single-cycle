@@ -40,8 +40,7 @@ architecture arch of Processor is
     signal reg_dst, reg_write : std_logic;
     signal mem_to_reg : std_logic;
     signal ula_src : std_logic;
-    signal ula_op : std_logic_vector(1 downto 0);
-    
+    signal ula_op : std_logic_vector(5 downto 0);
 begin
     CONTROL_UNIT : entity work.ControlUnit
         port map (

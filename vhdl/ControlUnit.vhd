@@ -10,7 +10,7 @@ entity ControlUnit is
         reg_dst, reg_write : out std_logic;
         mem_to_reg : out std_logic;
         ula_src : out std_logic;
-        ula_op : out std_logic_vector(1 downto 0)
+        ula_op : out std_logic_vector(5 downto 0)
     );
 end ControlUnit;
 
@@ -39,33 +39,33 @@ begin
             when "000100" => -- ADDI
                 reg_write <= '1';
                 ula_src   <= '1';
-                ula_op    <= "01";
+                ula_op    <= "000010";
                 
             when "000101" => -- SUBI
                 reg_write <= '1';
                 ula_src   <= '1';
-                ula_op    <= "10";
+                ula_op    <= "000011";
             
             when "000110" => -- LDI
                 reg_write <= '1';
                 ula_src   <= '1';
-                ula_op    <= "11";
+                ula_op    <= "000001";
 
             when "000111" => -- BEQ
                 branch <= '1';
-                ula_op <= "10";
+                ula_op <= "000011";
             
             when "010000" => -- LW
                 mem_read   <= '1';
                 reg_write  <= '1';
                 mem_to_reg <= '1';
                 ula_src    <= '1';
-                ula_op     <= "01";
+                ula_op     <= "000010";
 
             when "010001" => -- SW
                 mem_write <= '1';
                 ula_src   <= '1';
-                ula_op    <= "01";
+                ula_op    <= "000010";
 
             when "010010" => -- J
                 jump <= '1';
