@@ -46,6 +46,7 @@ ISA = {
     "sub":  InstructionDef(opcode="000000", format=InstrFormat.R, funct="000011"),
     "sll":  InstructionDef(opcode="000000", format=InstrFormat.R, funct="001010"),
     "srl":  InstructionDef(opcode="000000", format=InstrFormat.R, funct="001011"),
+    "mul":  InstructionDef(opcode="000000", format=InstrFormat.R, funct="001100"),
     "addi": InstructionDef(opcode="000100", format=InstrFormat.I),
     "subi": InstructionDef(opcode="000101", format=InstrFormat.I),
     "ldi":  InstructionDef(opcode="000110", format=InstrFormat.I),

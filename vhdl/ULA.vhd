@@ -13,8 +13,9 @@ entity ULA is
 end ULA;
 
 architecture arch of ULA is
-    signal A_int, B_int, soma_out : std_logic_vector(N-1 downto 0);
-    signal Cout_int : std_logic;
+    signal A_int, B_int : std_logic_vector(N-1 downto 0);
+    signal soma_out : std_logic_vector(N-1 downto 0);
+    signal mult_out : std_logic_vector((2*N)-1 downto 0);
     signal result : std_logic_vector(N-1 downto 0);
 
 begin
@@ -27,8 +28,16 @@ begin
             Cout => open
         );
 
+    MULTIPLIER : entity work.MultMatricial
+        generic map (N => N)
+        port map (
+            A => A_int,
+            B => B_int,
+            S => mult_out
+        );
+
     -- CONTROL UNIT
-    process(A, B, GS, soma_out)
+    process(A, B, GS, soma_out, mult_out)
     begin
         -- default values
         A_int <= (others => '0');
@@ -76,8 +85,14 @@ begin
             when "001001" => result <= A xor B; -- A XOR B
 
             -- Shift
-            when "001010" => result <= B(29 downto 0) & "00"; -- SLL B
-            when "001011" => result <= "00" & B(31 downto 2); -- SRL B
+            when "001010" => result <= B(N-2 downto 0) & '0'; -- SLL B
+            when "001011" => result <= '0' & B(N-1 downto 1); -- SRL B
+
+            -- MUL | A * B
+            when "001100" =>
+                A_int <= A;
+                B_int <= B;
+                result <= mult_out(N-1 downto 0);
 
             when others => result <= (others => '0');
         end case;

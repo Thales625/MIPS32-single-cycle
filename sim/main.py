@@ -31,6 +31,7 @@ runner = get_runner(sim)
 # define vhdl files
 vhdl_sources = [
     vhdl_dir / "Adder.vhd",
+    vhdl_dir / "MultMatricial.vhd",
     vhdl_dir / "Mux2_1.vhd",
     vhdl_dir / "Reg.vhd",
     vhdl_dir / "RegFile.vhd",

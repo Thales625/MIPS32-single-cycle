@@ -22,6 +22,11 @@ architecture arch of RegFile is
     signal s_Reg : reg_array := (others => (others => '0'));
 
 begin
+    -- data out
+    A <= s_Reg(to_integer(unsigned(A_sel)));
+    B <= s_Reg(to_integer(unsigned(B_sel)));
+
+    -- data in
     process(clock)
     begin
         if rising_edge(clock) then
@@ -30,9 +35,5 @@ begin
             end if;
         end if;
     end process;
-
-    -- select out
-    A <= s_Reg(to_integer(unsigned(A_sel)));
-    B <= s_Reg(to_integer(unsigned(B_sel)));
 
 end arch;
