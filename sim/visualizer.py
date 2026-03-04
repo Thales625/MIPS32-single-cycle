@@ -25,6 +25,9 @@ class Window:
     # memory dump
     MDMP_size = 16
 
+    # log
+    log_messages = []
+
     # variable
     dut = None
 
@@ -33,11 +36,11 @@ class Window:
         cls.dut = dut
 
         dpg.create_context()
-        dpg.create_viewport(title='MIPS32 - Monitor', width=1024, height=768)
+        dpg.create_viewport(title='MIPS32 - Monitor', width=900, height=660)
         dpg.setup_dearpygui()
 
         # control panel
-        with dpg.window(label="Control Panel", width=550, height=130, no_resize=True, no_close=True):
+        with dpg.window(label="Control Panel", width=550, height=130, no_close=True):
             with dpg.group(horizontal=True):
                 dpg.add_button(label="Play", tag="btn_play", width=80, height=30, callback=cls.btn_play_pause)
                 dpg.add_button(label="Step", width=80, height=30, callback=cls.btn_step)
@@ -68,7 +71,7 @@ class Window:
                         dpg.add_text("0x00000000 (0)", tag=f"mem_{i}", color=[0, 255, 255])
 
         # bitmap display
-        with dpg.window(label="Bitmap Display", width=cls.BM_p_size*cls.BM_grid_w+20, height=cls.BM_p_size*cls.BM_grid_h+120, pos=(560, 0), no_resize=True, no_close=True):
+        with dpg.window(label="Bitmap Display", width=cls.BM_p_size*cls.BM_grid_w+20, height=cls.BM_p_size*cls.BM_grid_h+80, pos=(560, 0), no_resize=True, no_close=True):
             dpg.add_input_int(label="Base Addr", tag="BM_base_addr", default_value=0, step=cls.MDMP_size, callback=cls.update_bitmap)
 
             dpg.add_spacer(height=10)
@@ -81,6 +84,10 @@ class Window:
                         
                         dpg.draw_rectangle(pmin=p1, pmax=p2, fill=(0, 0, 0, 255), color=(40, 40, 40, 125 if cls.BM_border else 0), tag=f"px_{x}_{y}")
 
+        # log
+        with dpg.window(label="Log", width=cls.BM_p_size*cls.BM_grid_w+20, height=250, pos=(560, cls.BM_p_size*cls.BM_grid_h+90), horizontal_scrollbar=True, no_close=True):
+            dpg.add_text("", tag="log_text", color=[170, 200, 170])
+
         # init data
         cls.update_reg_file()
         cls.update_mem_dmp()
@@ -88,6 +95,16 @@ class Window:
 
         # show window
         dpg.show_viewport()
+
+    @classmethod
+    def log(cls, message:str):
+        cls.log_messages.append(message)
+
+        # limit messages
+        if len(cls.log_messages) > 100: cls.log_messages.pop(0)
+
+        # update log messages
+        dpg.set_value("log_text", "\n".join(reversed(cls.log_messages)))
 
     @classmethod
     def btn_play_pause(cls):
