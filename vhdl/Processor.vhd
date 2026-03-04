@@ -35,7 +35,7 @@ architecture arch of Processor is
     signal jmp_address : std_logic_vector(N-1 downto 0);
     
     -- control-flags
-    signal jump, branch : std_logic;
+    signal jump, branch_eq, branch_ne : std_logic;
     signal mem_read, mem_write : std_logic;
     signal reg_dst, reg_write : std_logic;
     signal mem_to_reg : std_logic;
@@ -46,7 +46,8 @@ begin
         port map (
             opcode     => Instruction(31 downto 26),
             jump       => jump,
-            branch     => branch,
+            branch_eq  => branch_eq,
+            branch_ne  => branch_ne,
             mem_read   => mem_read,
             mem_write  => mem_write,
             reg_dst    => reg_dst,
@@ -184,5 +185,5 @@ begin
     
     -- PC SOURCE
     jmp_address <= PC_plus4(31 downto 28) & Instruction(25 downto 0) & "00";
-    PC_SRC <= branch and ULA_Z;
+    PC_SRC <= (branch_eq and ULA_Z) or (branch_ne and (not ULA_Z));
 end arch;
