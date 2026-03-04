@@ -1,4 +1,5 @@
 # assembler
+assembler/__pycache__/
 assembler/code.asm
 assembler/code.bin
 assembler/data.bin
@@ -8,3 +9,4 @@ sim/__pycache__/
 sim/top/
 sim/results.xml
 sim/transcript
+sim/vsim_stacktrace.vstf
