@@ -53,7 +53,7 @@ class Window:
         with dpg.window(label="Register File", width=270, height=520, pos=(0, 140), no_close=True):
             with dpg.table(header_row=True, borders_innerH=True, borders_innerV=True):
                 dpg.add_table_column(label="Reg")
-                dpg.add_table_column(label="Value (Hex)")
+                dpg.add_table_column(label="Value")
                 for i in range(32):
                     with dpg.table_row():
                         dpg.add_text(f"${i}")
@@ -64,7 +64,7 @@ class Window:
             dpg.add_input_int(label="Base Addr", tag="mem_base_addr", default_value=0, step=cls.MDMP_size, callback=cls.update_mem_dmp)
             with dpg.table(header_row=True, borders_innerH=True, borders_innerV=True):
                 dpg.add_table_column(label="Address")
-                dpg.add_table_column(label="Value (Hex)")
+                dpg.add_table_column(label="Value")
                 for i in range(cls.MDMP_size):
                     with dpg.table_row():
                         dpg.add_text(f"[{i:04d}]", tag=f"mem_p_{i}")
