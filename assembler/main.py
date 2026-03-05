@@ -43,7 +43,7 @@ ISA = {
     "xor":  InstructionDef(opcode="000000", format=InstrFormat.R, operand_order=(Operand.C, Operand.A, Operand.B), funct="001000"),
     "sll":  InstructionDef(opcode="000000", format=InstrFormat.R, operand_order=(Operand.C, Operand.B),            funct="001010"),
     "srl":  InstructionDef(opcode="000000", format=InstrFormat.R, operand_order=(Operand.C, Operand.B),            funct="001011"),
-    "mult": InstructionDef(opcode="000000", format=InstrFormat.R, operand_order=(Operand.C, Operand.A, Operand.B), funct="001100"),
+    "mul": InstructionDef(opcode="000000", format=InstrFormat.R, operand_order=(Operand.C, Operand.A, Operand.B), funct="001100"),
 
     # I-Type
     "addi": InstructionDef(opcode="000100", format=InstrFormat.I, operand_order=(Operand.B, Operand.A, Operand.I)),
