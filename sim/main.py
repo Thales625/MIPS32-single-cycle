@@ -17,8 +17,6 @@ if platform.system() == "Linux":
     except FileNotFoundError:
         print("WARNING: GCC not found. Questa might fail when loading the GUI.")
 
-os.environ["PYTHONUNBUFFERED"] = "1"
-
 # define simulator
 sim = os.getenv("SIM", "questa")
 
