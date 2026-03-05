@@ -102,7 +102,7 @@ begin
         );
     
     MEM_DATA : entity work.Memoria_Dados
-        generic map (ADDR_WIDTH => 10)
+        generic map (ADDR_WIDTH => 9)
         port map (
             clk      => clock,
             EscMem   => mem_write,
