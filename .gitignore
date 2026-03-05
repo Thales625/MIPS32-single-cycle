@@ -1,7 +1,5 @@
 # assembler
 assembler/__pycache__/
-assembler/code.bin
-assembler/data.bin
 
 # sim
 sim/__pycache__/
