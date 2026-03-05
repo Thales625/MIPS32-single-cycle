@@ -1,6 +1,5 @@
 # assembler
 assembler/__pycache__/
-assembler/code.asm
 assembler/code.bin
 assembler/data.bin
 
