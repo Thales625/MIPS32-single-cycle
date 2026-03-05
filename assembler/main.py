@@ -190,7 +190,7 @@ class Assembler:
             if arg in Assembler.sym_table:
                 arg = Assembler.sym_table[arg]
 
-            elif type(arg) == str and arg.lower() in REGISTERS:
+            if type(arg) == str and arg.lower() in REGISTERS:
                 arg = REGISTERS[arg.lower()]
                 
             if type(arg) == str: arg = arg.replace('$', '')
