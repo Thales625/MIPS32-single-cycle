@@ -9,6 +9,9 @@
     BALL_X: .word 15
     BALL_Y: .word 8
 
+.eqv $one $r1
+.eqv POINTS $r2
+
 .eqv SIZE_L1 $r5
 .eqv SIZE_SLL2 $r6
 .eqv SIZE $r7
@@ -21,6 +24,8 @@
     sll SIZE_SLL2, SIZE
     sll SIZE_SLL2, SIZE_SLL2
     dec SIZE_L1, SIZE
+
+    ldi $one, 1
 
     # white
     ldi PLAYER_COLOR, 0
@@ -83,6 +88,7 @@
         # $t4 = aux y
         # $t5 = next ball x
         # $t6 = next ball y
+        # $t7 = player pos y
 
         # get pos
         lw $t1, BALL_X(0)
@@ -94,8 +100,14 @@
         add $t5, $t1, $t3
         add $t6, $t2, $t4
 
+        # check player collision
+        bne $t5, $one, ball_check_bounds
+        lw $t7, PLAYER_Y(0)
+        beq $t6, $t7, hit_player
+
         # check bounds
-        beq $t5, $zero, invert_ball_move_x
+        ball_check_bounds:
+        beq $t5, $zero, hit_wall
         beq $t5, SIZE_L1, invert_ball_move_x
         return_invert_ball_move_x:
 
@@ -135,3 +147,11 @@
         inc $t3, $t3
         sw $t3, BALL_MOVE_X(0)
         j return_invert_ball_move_x
+
+    hit_wall:
+        ldi POINTS, 0
+        j invert_ball_move_x
+
+    hit_player:
+        inc POINTS, POINTS
+        j invert_ball_move_x
