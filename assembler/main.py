@@ -147,6 +147,8 @@ class Assembler:
                         print(TermFormat.YELLOW + f"Symbol '{label_split[0]}' already defined with value: {Assembler.sym_table[label_split[0]]}." + TermFormat.END)
                     line = label_split[1].strip()
 
+                if not line.strip(): continue
+
                 first_pass_out.append((i, line))
                 code_address += 1
                 continue
