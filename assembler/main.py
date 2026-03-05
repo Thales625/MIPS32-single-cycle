@@ -58,7 +58,7 @@ ISA = {
     "sw":   InstructionDef(opcode="010001", format=InstrFormat.M, operand_order=(Operand.B, Operand.I, Operand.A)),
 
     # J-Type
-    "j":    InstructionDef(opcode="010010", format=InstrFormat.J, operand_order=(Operand.J)),
+    "j":    InstructionDef(opcode="010010", format=InstrFormat.J, operand_order=(Operand.J,)),
 }
 
 class AssemblerState(Enum):
