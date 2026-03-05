@@ -6,7 +6,8 @@ from utils import to_bin, TermFormat
 REGISTERS = {
     "$zero": 0,
     "$r1": 1, "$r2": 2, "$r3": 3, "$r4": 4, "$r5": 5, "$r6": 6, "$r7": 7, "$r8": 8, "$r9": 9,
-    "$s0": 16, "$s1": 17, "$s2": 18, "$s3": 19, "$s4": 20, "$s5": 21, "$s6": 22, "$s7": 23,
+    "$t1": 10, "$t2": 11, "$t3": 12, "$t4": 13, "$t5": 14, "$t6": 15, "$t7": 16,
+    "$s1": 17, "$s2": 18, "$s3": 19, "$s4": 20, "$s5": 21, "$s6": 22, "$s7": 23,
     "$sp": 29,
     "$ra": 31
 }
@@ -33,16 +34,17 @@ class InstructionDef:
 
 ISA = {
     # R-Type
-    "add":  InstructionDef(opcode="000000", format=InstrFormat.R, operand_order=(Operand.C, Operand.A, Operand.B), funct="000010"),
-    "sub":  InstructionDef(opcode="000000", format=InstrFormat.R, operand_order=(Operand.C, Operand.A, Operand.B), funct="000011"),
-    "inc":  InstructionDef(opcode="000000", format=InstrFormat.R, operand_order=(Operand.C, Operand.A),            funct="000011"),
-    "dec":  InstructionDef(opcode="000000", format=InstrFormat.R, operand_order=(Operand.C, Operand.A),            funct="000011"),
-    "not":  InstructionDef(opcode="000000", format=InstrFormat.R, operand_order=(Operand.C, Operand.A),            funct="000011"),
-    "and":  InstructionDef(opcode="000000", format=InstrFormat.R, operand_order=(Operand.C, Operand.A, Operand.B), funct="000111"),
-    "or":   InstructionDef(opcode="000000", format=InstrFormat.R, operand_order=(Operand.C, Operand.A, Operand.B), funct="001000"),
-    "xor":  InstructionDef(opcode="000000", format=InstrFormat.R, operand_order=(Operand.C, Operand.A, Operand.B), funct="001000"),
-    "sll":  InstructionDef(opcode="000000", format=InstrFormat.R, operand_order=(Operand.C, Operand.B),            funct="001010"),
-    "srl":  InstructionDef(opcode="000000", format=InstrFormat.R, operand_order=(Operand.C, Operand.B),            funct="001011"),
+    "mov": InstructionDef(opcode="000000", format=InstrFormat.R, operand_order=(Operand.C, Operand.B),            funct="000001"),
+    "add": InstructionDef(opcode="000000", format=InstrFormat.R, operand_order=(Operand.C, Operand.A, Operand.B), funct="000010"),
+    "sub": InstructionDef(opcode="000000", format=InstrFormat.R, operand_order=(Operand.C, Operand.A, Operand.B), funct="000011"),
+    "inc": InstructionDef(opcode="000000", format=InstrFormat.R, operand_order=(Operand.C, Operand.A),            funct="000100"),
+    "dec": InstructionDef(opcode="000000", format=InstrFormat.R, operand_order=(Operand.C, Operand.A),            funct="000101"),
+    "not": InstructionDef(opcode="000000", format=InstrFormat.R, operand_order=(Operand.C, Operand.A),            funct="000110"),
+    "and": InstructionDef(opcode="000000", format=InstrFormat.R, operand_order=(Operand.C, Operand.A, Operand.B), funct="000111"),
+    "or":  InstructionDef(opcode="000000", format=InstrFormat.R, operand_order=(Operand.C, Operand.A, Operand.B), funct="001000"),
+    "xor": InstructionDef(opcode="000000", format=InstrFormat.R, operand_order=(Operand.C, Operand.A, Operand.B), funct="001001"),
+    "sll": InstructionDef(opcode="000000", format=InstrFormat.R, operand_order=(Operand.C, Operand.B),            funct="001010"),
+    "srl": InstructionDef(opcode="000000", format=InstrFormat.R, operand_order=(Operand.C, Operand.B),            funct="001011"),
     "mul": InstructionDef(opcode="000000", format=InstrFormat.R, operand_order=(Operand.C, Operand.A, Operand.B), funct="001100"),
 
     # I-Type
