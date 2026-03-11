@@ -176,7 +176,7 @@ class Assembler:
 
                 print(f"\t{line:<20} -> b{bin_line}")
             except Exception as e:
-                print(TermFormat.RED + f"Error line {i}:\n\t{line}\n\t{e}" + TermFormat.END)
+                print(TermFormat.RED + f"Error in line {i}:\n\t{line}\n\t{e}" + TermFormat.END)
 
         return code_bin, data_bin
 
@@ -294,13 +294,20 @@ class Assembler:
                 to_bin(fields[Operand.J], 26))
 
 if __name__ == "__main__":
-    with open("code.asm", 'r') as f:
-        lines = f.readlines()
-    
-    bin_code, bin_data = Assembler.assemble(lines)
-    
-    with open("code.bin", 'w') as f:
-        f.writelines(bin_code)
+    import sys
 
-    with open("data.bin", 'w') as f:
-        f.writelines([d+"\n" for d in bin_data])
+    path = sys.argv[1] if len(sys.argv) > 1 else "code.asm"
+
+    try:
+        with open(path, 'r') as f:
+            lines = f.readlines()
+
+        bin_code, bin_data = Assembler.assemble(lines)
+        
+        with open("code.bin", 'w') as f:
+            f.writelines(bin_code)
+
+        with open("data.bin", 'w') as f:
+            f.writelines([d+"\n" for d in bin_data])
+    except FileNotFoundError:
+        print(TermFormat.RED + f"Error: file '{path}' was not found." + TermFormat.END)
